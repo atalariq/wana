@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="atalariq design system — a live, interactive token playground with OKLCH editing, contrast checking, and import/export."
+    />
+    <title>atalariq design system</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ── Header ───────────────────────────────────────────────────── -->
+    <header class="site-header">
+      <button
+        class="nav-toggle"
+        id="navToggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <h1 class="site-title">atalariq <span>design system</span></h1>
+      <div class="header-controls">
+        <div class="proposal-mini" role="group" aria-label="Proposal">
+          <span class="proposal-mini-label">Proposal</span>
+          <div class="proposal-mini-tabs" id="proposalMiniTabs"></div>
+        </div>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          aria-label="Toggle light/dark theme"
+        >
+          <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+          <span class="theme-toggle-text">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- ── Sidebar ────────────────────────────────────────────────── -->
+      <nav class="sidebar" id="sidebar" aria-label="Sections">
+        <ul class="nav-list">
+          <li>
+            <a href="#colors" class="nav-link" data-section="colors"
+              ><span class="nav-ico">🎨</span> Colors</a
+            >
+          </li>
+          <li>
+            <a href="#typography" class="nav-link" data-section="typography"
+              ><span class="nav-ico">🔤</span> Typography</a
+            >
+          </li>
+          <li>
+            <a href="#spacing" class="nav-link" data-section="spacing"
+              ><span class="nav-ico">📏</span> Spacing</a
+            >
+          </li>
+          <li>
+            <a href="#components" class="nav-link" data-section="components"
+              ><span class="nav-ico">🧩</span> Components</a
+            >
+          </li>
+          <li>
+            <a href="#editor" class="nav-link" data-section="editor"
+              ><span class="nav-ico">🎛️</span> Token Editor</a
+            >
+          </li>
+          <li>
+            <a href="#export" class="nav-link" data-section="export"
+              ><span class="nav-ico">📦</span> Import / Export</a
+            >
+          </li>
+        </ul>
+        <div class="sidebar-foot">
+          <p class="dogfood-note">
+            This site dogfoods its own tokens — switch a proposal and
+            <em>everything</em> changes.
+          </p>
+        </div>
+      </nav>
+
+      <!-- ── Main content ───────────────────────────────────────────── -->
+      <main class="main" id="main">
+        <!-- 1. COLORS -->
+        <section id="colors" class="section">
+          <div class="section-head">
+            <h2>Colors</h2>
+            <p class="section-sub">
+              Semantic color roles. Each swatch shows hex, OKLCH, and WCAG
+              contrast against the page background.
+            </p>
+          </div>
+
+          <div
+            class="proposal-tabs"
+            id="proposalTabs"
+            role="tablist"
+            aria-label="Color proposals"
+          ></div>
+
+          <div class="palette-split">
+            <div class="palette-col">
+              <h3 class="palette-title">
+                Light <span class="palette-meta" id="lightMeta"></span>
+              </h3>
+              <div class="swatch-grid" id="swatchesLight"></div>
+            </div>
+            <div class="palette-col">
+              <h3 class="palette-title">
+                Dark <span class="palette-meta" id="darkMeta"></span>
+              </h3>
+              <div class="swatch-grid" id="swatchesDark"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. TYPOGRAPHY -->
+        <section id="typography" class="section">
+          <div class="section-head">
+            <h2>Typography</h2>
+            <p class="section-sub">
+              A fluid <code>clamp()</code>-based type scale with a 65ch measure
+              for comfortable reading.
+            </p>
+          </div>
+
+          <div class="type-scale" id="typeScale"></div>
+
+          <div class="font-stacks">
+            <div class="font-card">
+              <span class="font-label">Sans</span>
+              <p class="font-sample" style="font-family: var(--font-sans)">
+                The quick brown fox jumps
+              </p>
+              <code class="font-code">--font-sans</code>
+            </div>
+            <div class="font-card">
+              <span class="font-label">Serif</span>
+              <p class="font-sample" style="font-family: var(--font-serif)">
+                The quick brown fox jumps
+              </p>
+              <code class="font-code">--font-serif</code>
+            </div>
+            <div class="font-card">
+              <span class="font-label">Mono</span>
+              <p class="font-sample" style="font-family: var(--font-mono)">
+                The quick brown fox jumps
+              </p>
+              <code class="font-code">--font-mono</code>
+            </div>
+          </div>
+
+          <div class="measure-demo">
+            <h3>Measure / line length (65ch)</h3>
+            <p class="measure-text">
+              Typography is the craft of arranging type to make written language
+              legible, readable, and appealing. A comfortable measure keeps
+              lines between roughly 45 and 75 characters so the eye can return
+              to the start of the next line without losing its place. This
+              paragraph is capped at <code>--measure</code> (65ch) to
+              demonstrate the ideal reading width.
+            </p>
+          </div>
+        </section>
+
+        <!-- 3. SPACING -->
+        <section id="spacing" class="section">
+          <div class="section-head">
+            <h2>Spacing</h2>
+            <p class="section-sub">
+              A modular spacing scale, from <code>--space-2xs</code> to
+              <code>--space-2xl</code>, stacked for visual comparison.
+            </p>
+          </div>
+          <div class="space-scale" id="spaceScale"></div>
+        </section>
+
+        <!-- 4. COMPONENTS -->
+        <section id="components" class="section">
+          <div class="section-head">
+            <h2>Components</h2>
+            <p class="section-sub">
+              Live preview — every component uses only CSS custom properties, so
+              they update the instant you edit a token.
+            </p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="comp-group">
+            <h3 class="comp-title">Buttons</h3>
+            <div class="comp-row">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+              <button class="btn btn-success">Success</button>
+              <button class="btn btn-warning">Warning</button>
+              <button class="btn btn-error">Error</button>
+              <button class="btn btn-outline">Outline</button>
+              <button class="btn btn-ghost">Ghost</button>
+              <button class="btn btn-primary" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Cards -->
+          <div class="comp-group">
+            <h3 class="comp-title">Cards</h3>
+            <div class="comp-row comp-cards">
+              <div class="card">
+                <p>
+                  A basic card. Surfaces sit just above the page background
+                  using <code>--surface</code>.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h4>Card with header</h4>
+                  <span class="badge badge-accent">New</span>
+                </div>
+                <p>
+                  Header uses the overlay token for separation, with a body
+                  below.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card-image" aria-hidden="true">
+                  <span>16 : 9</span>
+                </div>
+                <div class="card-body">
+                  <h4>Card with image</h4>
+                  <p>The placeholder above scales with the card width.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Forms -->
+          <div class="comp-group">
+            <h3 class="comp-title">Form inputs</h3>
+            <div class="comp-row comp-forms">
+              <label class="field">
+                <span class="field-label">Text input</span>
+                <input
+                  type="text"
+                  class="input"
+                  placeholder="Type something…"
+                />
+              </label>
+              <label class="field">
+                <span class="field-label">Textarea</span>
+                <textarea
+                  class="input"
+                  rows="3"
+                  placeholder="Multiple lines…"
+                ></textarea>
+              </label>
+              <label class="field">
+                <span class="field-label">Select</span>
+                <select class="input">
+                  <option>Choose an option</option>
+                  <option>Warm Ink</option>
+                  <option>Night Scholar</option>
+                  <option>Balanced</option>
+                </select>
+              </label>
+              <div class="field">
+                <span class="field-label">Choices</span>
+                <div class="choice-row">
+                  <label class="choice"
+                    ><input type="checkbox" checked /> Checkbox</label
+                  >
+                  <label class="choice"
+                    ><input type="radio" name="demo-radio" checked /> Radio
+                    A</label
+                  >
+                  <label class="choice"
+                    ><input type="radio" name="demo-radio" /> Radio B</label
+                  >
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked />
+                  <span class="toggle-track"
+                    ><span class="toggle-thumb"></span
+                  ></span>
+                  <span>Toggle switch</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Badges -->
+          <div class="comp-group">
+            <h3 class="comp-title">Badges / Tags</h3>
+            <div class="comp-row" id="badgeRow"></div>
+          </div>
+
+          <!-- Alerts -->
+          <div class="comp-group">
+            <h3 class="comp-title">Alerts</h3>
+            <div class="comp-stack">
+              <div class="alert alert-success">
+                <span class="alert-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Success</strong> — your changes have been saved.
+                </div>
+              </div>
+              <div class="alert alert-warning">
+                <span class="alert-icon" aria-hidden="true">!</span>
+                <div>
+                  <strong>Warning</strong> — this action cannot be undone.
+                </div>
+              </div>
+              <div class="alert alert-error">
+                <span class="alert-icon" aria-hidden="true">✕</span>
+                <div><strong>Error</strong> — something went wrong.</div>
+              </div>
+              <div class="alert alert-info">
+                <span class="alert-icon" aria-hidden="true">i</span>
+                <div><strong>Info</strong> — a new proposal is available.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="comp-group">
+            <h3 class="comp-title">Navigation</h3>
+            <nav class="demo-nav">
+              <span class="demo-nav-brand">◆ brand</span>
+              <a href="#components" class="demo-nav-link active">Home</a>
+              <a href="#components" class="demo-nav-link">Docs</a>
+              <a href="#components" class="demo-nav-link">About</a>
+              <button class="btn btn-primary btn-sm">Sign in</button>
+            </nav>
+          </div>
+
+          <!-- Code block -->
+          <div class="comp-group">
+            <h3 class="comp-title">Code block</h3>
+            <pre class="code-block"><code>:root {
+  --accent: oklch(47.5% 0.199 286.2);
+  --radius: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-radius: var(--radius);
+}</code></pre>
+          </div>
+
+          <!-- Typography in context -->
+          <div class="comp-group">
+            <h3 class="comp-title">Typography in context</h3>
+            <article class="article">
+              <h1>The Art of Reading on Screens</h1>
+              <p>
+                Good typography is invisible. When a reader glides through a
+                paragraph without friction, the type is doing its job. This
+                article previews how headings, body text, lists, links, and
+                quotes render with the current tokens.
+              </p>
+              <h2>Why measure matters</h2>
+              <p>
+                Lines that run too long tire the eye; lines too short break
+                rhythm. Aim for a measure of
+                <a href="#typography">45–75 characters</a> per line.
+              </p>
+              <ul>
+                <li>Comfortable line height</li>
+                <li>Generous paragraph spacing</li>
+                <li>Restrained, purposeful color</li>
+              </ul>
+              <blockquote>
+                Typography is what language looks like.<cite
+                  >— Ellen Lupton</cite
+                >
+              </blockquote>
+              <h3>Ordered priorities</h3>
+              <ol>
+                <li>Readability first</li>
+                <li>Hierarchy second</li>
+                <li>Personality third</li>
+              </ol>
+              <p>
+                Inline <code>code</code> uses the mono stack, while emphasis
+                like <em>this</em> and <strong>this</strong> stays in the body
+                font.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <!-- 5. TOKEN EDITOR -->
+        <section id="editor" class="section">
+          <div class="section-head">
+            <h2>Token Editor</h2>
+            <p class="section-sub">
+              Edit the <strong id="editorThemeLabel">light</strong> palette
+              live. Changes apply instantly to the whole page. Toggle the theme
+              to edit the other palette.
+            </p>
+          </div>
+
+          <div class="editor-grid">
+            <div class="editor-roles">
+              <h3>Color roles</h3>
+              <div class="role-list" id="roleList"></div>
+              <button class="btn btn-outline" id="resetBtn">
+                ↺ Reset to proposal defaults
+              </button>
+            </div>
+
+            <div class="editor-detail">
+              <h3>
+                Editing:
+                <span id="editingRole" class="editing-role">accent</span>
+              </h3>
+              <div class="editor-preview" id="editorPreview"></div>
+
+              <div class="oklch-sliders">
+                <label class="slider-row">
+                  <span class="slider-label">L <small>lightness</small></span>
+                  <input
+                    type="range"
+                    id="slL"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    class="slider"
+                  />
+                  <output id="outL">0</output>
+                </label>
+                <label class="slider-row">
+                  <span class="slider-label">C <small>chroma</small></span>
+                  <input
+                    type="range"
+                    id="slC"
+                    min="0"
+                    max="0.37"
+                    step="0.001"
+                    class="slider"
+                  />
+                  <output id="outC">0</output>
+                </label>
+                <label class="slider-row">
+                  <span class="slider-label">H <small>hue</small></span>
+                  <input
+                    type="range"
+                    id="slH"
+                    min="0"
+                    max="360"
+                    step="0.1"
+                    class="slider"
+                  />
+                  <output id="outH">0</output>
+                </label>
+              </div>
+
+              <div class="editor-inputs">
+                <label class="field">
+                  <span class="field-label">Native picker</span>
+                  <input
+                    type="color"
+                    id="colorPicker"
+                    class="color-picker-native"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">Hex</span>
+                  <input
+                    type="text"
+                    id="inHex"
+                    class="input mono"
+                    spellcheck="false"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">OKLCH</span>
+                  <input
+                    type="text"
+                    id="inOklch"
+                    class="input mono"
+                    spellcheck="false"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">HSL</span>
+                  <input
+                    type="text"
+                    id="inHsl"
+                    class="input mono"
+                    spellcheck="false"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contrast checker -->
+          <div class="contrast-checker">
+            <h3>Contrast checker</h3>
+            <div class="contrast-controls">
+              <label class="field">
+                <span class="field-label">Foreground</span>
+                <select class="input" id="contrastFg"></select>
+              </label>
+              <label class="field">
+                <span class="field-label">Background</span>
+                <select class="input" id="contrastBg"></select>
+              </label>
+            </div>
+            <div class="contrast-result" id="contrastResult">
+              <div class="contrast-sample" id="contrastSample">Aa</div>
+              <div class="contrast-readout">
+                <div class="contrast-ratio" id="contrastRatio">—</div>
+                <div class="contrast-grades" id="contrastGrades"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. IMPORT / EXPORT -->
+        <section id="export" class="section">
+          <div class="section-head">
+            <h2>Import / Export</h2>
+            <p class="section-sub">
+              Export the current tokens in multiple formats, or import a saved
+              set.
+            </p>
+          </div>
+
+          <div class="export-tabs" id="exportTabs" role="tablist">
+            <button class="export-tab active" data-fmt="css" role="tab">
+              CSS
+            </button>
+            <button class="export-tab" data-fmt="json" role="tab">
+              JSON (DTCG)
+            </button>
+            <button class="export-tab" data-fmt="figma" role="tab">
+              Figma Tokens
+            </button>
+          </div>
+
+          <div class="export-pane">
+            <div class="export-actions">
+              <button class="btn btn-secondary btn-sm" id="copyExport">
+                ⧉ Copy
+              </button>
+              <button class="btn btn-secondary btn-sm" id="downloadExport">
+                ⭳ Download
+              </button>
+              <span
+                class="export-status"
+                id="exportStatus"
+                aria-live="polite"
+              ></span>
+            </div>
+            <pre class="export-output"><code id="exportOutput"></code></pre>
+          </div>
+
+          <div class="import-pane">
+            <h3>Import</h3>
+            <div class="import-controls">
+              <label class="import-mode">
+                <span class="field-label">Format</span>
+                <select class="input" id="importFmt">
+                  <option value="json">JSON</option>
+                  <option value="css">CSS</option>
+                </select>
+              </label>
+              <label class="btn btn-outline btn-sm import-file-btn">
+                ⭱ Upload file
+                <input
+                  type="file"
+                  id="importFile"
+                  accept=".json,.css,.txt"
+                  hidden
+                />
+              </label>
+              <button class="btn btn-primary btn-sm" id="importBtn">
+                Load tokens
+              </button>
+              <span
+                class="export-status"
+                id="importStatus"
+                aria-live="polite"
+              ></span>
+            </div>
+            <textarea
+              class="input mono import-area"
+              id="importArea"
+              rows="8"
+              spellcheck="false"
+              placeholder="Paste JSON design tokens or CSS custom properties here…"
+            ></textarea>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
