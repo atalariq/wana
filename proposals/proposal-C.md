@@ -224,6 +224,15 @@ Drop-in compatible with the existing `tokens.css` variable names.
 - **−** Light `warning` (4.75:1) and the AA-large semantic-on-`overlay` cells are the structural yellow/green-on-light limit; lean on icons for status.
 - **−** Two different background _temperatures_ between modes means screenshots/branding shift feel slightly between light and dark — a deliberate trade for per-mode comfort.
 
+> **Deviation from the general research, on purpose.** The reusable Hermes color
+> synthesis (`~/Works/Hermes/.../personal-color-palette.md`) recommends a
+> "warm everywhere" default — Flexoki-light + Everforest-_dark_ with an accent
+> that shifts hue per mode (blue on light, green on dark). C goes the other way:
+> cool blue-black dark and one re-lit purple. This isn't drift — it's continuity
+> with the existing Journey tokens and a preference for temperature contrast over
+> warmth consistency. See `research/colorscheme-analysis.md` →
+> "Where this diverges from the general research."
+
 ---
 
 ## My recommendation

@@ -352,3 +352,37 @@ point. But its accent values are syntax-only — do not reuse for links/buttons.
 5. **Yellow is structurally hard on light.** Yellow's high intrinsic luminance means it _always_ struggles for contrast on light bg (Flexoki 3.39 AA-large, Gruvbox 3.33, Solarized 2.98 fail). For a `warning` role on light, push yellow toward amber/ochre (lower L, toward orange) — never lemon.
 
 6. **Warm bg + cool dark is a defensible split.** Gruvbox/Flexoki/Solarized/Everforest all use warm paper for light; Tokyo Night/Catppuccin Mocha use cool for dark. The existing Journey tokens (warm light, cool dark) are already on the right track — Proposal C formalizes it.
+
+---
+
+## Where this diverges from the general research (and why)
+
+This is the _applied_ layer. The reusable, general design-system knowledge lives
+separately in the Hermes research set (`~/Works/Hermes/research{,-site}/design-system`),
+and its color synthesis (`personal-color-palette.md`) lands on a different default:
+**Flexoki-light + Everforest-dark, "warm everywhere," with an accent that adapts
+hue per mode** (cool blue on light, warm green on dark).
+
+This repo deliberately goes elsewhere on three points. None of them contradict the
+general knowledge on _facts_ — the contrast math, WCAG thresholds, OKLCH authoring,
+and "retune don't invert" are identical. They're taste/scope calls:
+
+1. **Cool blue-black dark, not warm green-gray.** The general synthesis prefers
+   warmth in both modes (Everforest `#2D353B`). This system keeps the existing
+   Journey cool-dark (`#171a21`) for a deliberate _temperature contrast_ between
+   modes and a one-step migration from what's already shipped. Trade-off is owned
+   in `proposals/proposal-C.md` → "Honest trade-offs."
+
+2. **One re-lit purple, not an adaptive blue/green.** The general synthesis swaps
+   accent _hue_ per mode (what "pops" differs by background temperature). This
+   system holds a single purple identity (~286–291°) and moves only lightness —
+   the Solarized "shared accent" idea done accessibly (§2, lesson #2). It favors
+   brand consistency over per-mode pop.
+
+3. **CSS custom properties only, not DTCG JSON + a Global tier.** The general
+   tokens guidance prescribes a portable DTCG JSON layer (Global → Semantic) for
+   Style Dictionary. This system stays single-tier semantic CSS on purpose —
+   `AGENTS.md` defers build-time token transformers "for now." Revisit if the
+   system ever needs to output to non-web targets (iOS/Android/Figma).
+
+If any of these stop being deliberate, this is the note to delete.
