@@ -1,0 +1,55 @@
+/* ════════════════════════════════════════════════════════════════════
+   Design System — base color tokens
+   Baseline = Proposal C "Balanced" (see proposals/proposal-C.md).
+   PENDING SIGN-OFF: this is the recommended default, not yet ratified.
+
+   Authoring model: OKLCH is canonical (perceptual lightness lets us
+   re-light the accent per mode by arithmetic). Hex kept as a comment
+   for eyeballing. See research/color-theory.md §1.
+
+   Every fg/bg pair is WCAG AA+; verify with:  python3 tools/color.py
+   ════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── light (warm paper) ─────────────────────────────────────────── */
+  --bg: oklch(98.5% 0.003 84.6); /* #fbfaf8 */
+  --surface: oklch(95.5% 0.008 91.5); /* #f2f0ea */
+  --overlay: oklch(91.9% 0.012 91.5); /* #e7e4db */
+  --muted: oklch(49.5% 0.024 273.7); /* #5d6170  — 5.90:1 AA  */
+  --text: oklch(22.7% 0.012 270.8); /* #1a1c22  — 16.33:1 AAA */
+  --accent: oklch(47.5% 0.199 286.2); /* #5a3cc4  — 6.99:1 AA  */
+  --success: oklch(50.1% 0.127 136.1); /* #3f7320  — 5.46:1 AA  */
+  --warning: oklch(55% 0.117 73.3); /* #9a6500  — 4.75:1 AA  */
+  --error: oklch(51.8% 0.184 22.3); /* #bb2533  — 5.88:1 AA  */
+  --info: oklch(49% 0.13 255.6); /* #2660a8  — 6.06:1 AA  */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* ── dark (cool blue-black) ───────────────────────────────────── */
+    --bg: oklch(21.8% 0.015 266.9); /* #171a21 */
+    --surface: oklch(25.7% 0.018 270.6); /* #20232c */
+    --overlay: oklch(30.6% 0.021 269.4); /* #2b2f3a */
+    --muted: oklch(74.8% 0.023 268.4); /* #a7adbc — 7.75:1 AAA */
+    --text: oklch(93.1% 0.01 273.4); /* #e6e8ef — 14.22:1 AAA */
+    --accent: oklch(68.4% 0.153 290.9); /* #9b86f0 — 5.85:1 AA  */
+    --success: oklch(76.6% 0.13 131.8); /* #94c46a — 8.59:1 AAA */
+    --warning: oklch(78.6% 0.118 81); /* #e0b15a — 8.79:1 AAA */
+    --error: oklch(72.7% 0.137 11.9); /* #ef8090 — 6.77:1 AA  */
+    --info: oklch(74% 0.098 248.8); /* #79b0e6 — 7.60:1 AAA */
+  }
+}
+
+/* Explicit user choice wins over OS preference. */
+[data-theme="dark"] {
+  --bg: oklch(21.8% 0.015 266.9);
+  --surface: oklch(25.7% 0.018 270.6);
+  --overlay: oklch(30.6% 0.021 269.4);
+  --muted: oklch(74.8% 0.023 268.4);
+  --text: oklch(93.1% 0.01 273.4);
+  --accent: oklch(68.4% 0.153 290.9);
+  --success: oklch(76.6% 0.13 131.8);
+  --warning: oklch(78.6% 0.118 81);
+  --error: oklch(72.7% 0.137 11.9);
+  --info: oklch(74% 0.098 248.8);
+}
