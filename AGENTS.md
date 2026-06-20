@@ -1,6 +1,6 @@
-# Design System — Agent Guide
+# Wana — Agent Guide
 
-Personal design system for atalariq. Used across:
+Wana — a personal design system for atalariq. Used across:
 
 - **Journey** (digital garden, Astro) — `journey.atalariq.dev`
 - **Portfolio** (atalariq.github.io)
@@ -16,7 +16,7 @@ Personal design system for atalariq. Used across:
 
 ## Tokens
 
-The ratified token file is `tokens/base.css` — **Proposal D "Forest"**.
+The ratified token file is `tokens/base.css` — **Wana (Light / Dark)**, the palette that grew from the Proposal D "Forest" direction.
 
 | Category   | Key tokens                                                                                                       |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- |

@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════
-   atalariq design system — playground logic
+   Wana — playground logic
 
    - Color math (OKLCH ↔ hex ↔ HSL, WCAG contrast) ported verbatim from
      tools/color.py — no external libraries.
@@ -110,7 +110,7 @@ const PROPOSALS = {
     },
   },
   D: {
-    name: "Forest",
+    name: "Wana",
     light: {
       bg: "#fffcf0",
       surface: "#f2f0e5",
@@ -322,7 +322,7 @@ function normalizeHex(str) {
 /* ═══════════════════════ STATE ══════════════════════════════════════ */
 
 const state = {
-  proposal: "C",
+  proposal: "D",
   theme: "light",
   selectedRole: "accent",
   exportFmt: "css",
@@ -364,7 +364,7 @@ function renderProposalTabs() {
   const mini = $("#proposalMiniTabs");
   tabs.innerHTML = "";
   mini.innerHTML = "";
-  for (const key of ["A", "B", "C"]) {
+  for (const key of ["A", "B", "C", "D"]) {
     const t = el(
       "button",
       "proposal-tab" + (key === state.proposal ? " active" : ""),
@@ -624,9 +624,7 @@ function updateContrastResult() {
 
 function exportCss() {
   const lines = [];
-  lines.push(
-    "/* atalariq design system — " + PROPOSALS[state.proposal].name + " */",
-  );
+  lines.push("/* Wana — " + PROPOSALS[state.proposal].name + " */");
   lines.push(":root {");
   for (const role of ROLES)
     lines.push(
@@ -649,13 +647,22 @@ function exportCss() {
   lines.push("  --step-2: clamp(1.56rem, 1.4rem + 0.8vw, 2rem);");
   lines.push("  --step-3: clamp(1.95rem, 1.7rem + 1.25vw, 2.75rem);");
   lines.push("  --measure: 65ch;");
-  lines.push("  --radius: 0.5rem;");
+  lines.push("  --radius: 0.25rem;");
   lines.push(
     "  --space-2xs: 0.25rem;  --space-xs: 0.5rem;  --space-s: 0.75rem;",
   );
   lines.push(
     "  --space-m: 1rem;  --space-l: 1.5rem;  --space-xl: 2.5rem;  --space-2xl: 4rem;",
   );
+  lines.push(
+    "  --shadow: 0 1px 2px color-mix(in oklch, var(--text) 8%, transparent), 0 4px 12px color-mix(in oklch, var(--text) 6%, transparent);",
+  );
+  lines.push(
+    "  --ring: 0 0 0 3px color-mix(in oklch, var(--accent) 35%, transparent);",
+  );
+  lines.push("  --duration-fast: 0.15s;");
+  lines.push("  --duration-base: 0.25s;");
+  lines.push("  --easing: ease;");
   lines.push("}");
   lines.push("");
   lines.push('[data-theme="dark"] {');
@@ -693,7 +700,7 @@ function exportJson() {
       xl: { $value: "2.5rem" },
       "2xl": { $value: "4rem" },
     },
-    radius: { $type: "dimension", $value: "0.5rem" },
+    radius: { $type: "dimension", $value: "0.25rem" },
   };
   return JSON.stringify(doc, null, 2);
 }
@@ -720,7 +727,7 @@ function exportFigma() {
         xl: { value: "2.5rem", type: "spacing" },
         "2xl": { value: "4rem", type: "spacing" },
       },
-      radius: { value: "0.5rem", type: "borderRadius" },
+      radius: { value: "0.25rem", type: "borderRadius" },
     },
     $themes: [],
     $metadata: { tokenSetOrder: ["global", "light", "dark"] },
@@ -740,7 +747,7 @@ function renderExport() {
 
 function exportFilename() {
   const base =
-    "atalariq-tokens-" +
+    "wana-tokens-" +
     PROPOSALS[state.proposal].name.toLowerCase().replace(/\s+/g, "-");
   if (state.exportFmt === "css") return base + ".css";
   if (state.exportFmt === "figma") return base + ".figma.json";
