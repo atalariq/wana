@@ -33,8 +33,8 @@ body {
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+    background-color var(--duration-base) var(--easing),
+    color var(--duration-base) var(--easing);
 }
 
 a {
@@ -108,7 +108,7 @@ pre,
   background: var(--bg);
   color: var(--muted);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) var(--easing);
 }
 .proposal-mini-tabs button.active {
   background: var(--accent);
@@ -130,8 +130,8 @@ pre,
   color: var(--text);
   cursor: pointer;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease;
+    background-color var(--duration-fast) var(--easing),
+    border-color var(--duration-fast) var(--easing);
 }
 .theme-toggle:hover,
 .nav-toggle:hover {
@@ -181,8 +181,8 @@ pre,
   text-decoration: none;
   font-weight: 500;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color var(--duration-fast) var(--easing),
+    color var(--duration-fast) var(--easing);
 }
 .nav-link:hover {
   background: var(--surface);
@@ -258,7 +258,7 @@ h4 {
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--duration-fast) var(--easing);
 }
 .proposal-tab .pt-key {
   font-weight: 700;
@@ -480,9 +480,9 @@ h4 {
   border: 1px solid transparent;
   cursor: pointer;
   transition:
-    filter 0.15s ease,
-    background-color 0.15s ease,
-    color 0.15s ease;
+    filter var(--duration-fast) var(--easing),
+    background-color var(--duration-fast) var(--easing),
+    color var(--duration-fast) var(--easing);
   line-height: 1.4;
 }
 .btn:hover {
@@ -649,7 +649,7 @@ select.input {
   border-radius: 1rem;
   background: var(--overlay);
   position: relative;
-  transition: background-color 0.15s ease;
+  transition: background-color var(--duration-fast) var(--easing);
 }
 .toggle-thumb {
   position: absolute;
@@ -659,7 +659,7 @@ select.input {
   height: calc(1.35rem - 4px);
   border-radius: 50%;
   background: var(--bg);
-  transition: transform 0.15s ease;
+  transition: transform var(--duration-fast) var(--easing);
 }
 .toggle input:checked + .toggle-track {
   background: var(--accent);
