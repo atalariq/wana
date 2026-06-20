@@ -1,6 +1,7 @@
 # Design System — Agent Guide
 
 Personal design system for atalariq. Used across:
+
 - **Journey** (digital garden, Astro) — `journey.atalariq.dev`
 - **Portfolio** (atalariq.github.io)
 - **Research site** (research.atalariq.dev)
@@ -13,13 +14,23 @@ Personal design system for atalariq. Used across:
 3. **Personality** — warm, readable, not generic Bootstrap-feel
 4. **Simplicity** — CSS custom properties, no build-time token transformers (for now)
 
-## Existing Tokens (Journey)
+## Tokens
 
-Journey already has a preliminary token system at `~/Repos/journey/src/styles/tokens.css`:
-- Typography: minor-third scale (1.25), clamp() fluid
-- Spacing: 2xs → 2xl
-- Colors: warm light (hsl 40 30% 98%), cool dark (hsl 225 18% 11%), purple accent
-- Measure: 65ch, radius: 0.5rem
+The ratified token file is `tokens/base.css` — **Proposal D "Forest"**.
+
+| Category   | Key tokens                                                                                                       |
+| ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| Color      | `--bg`, `--surface`, `--overlay`, `--muted`, `--text`, `--accent`, `--success`, `--warning`, `--error`, `--info` |
+| Typography | `--font-sans`, `--font-serif`, `--font-mono`, `--step--1` → `--step-3`, `--measure`                              |
+| Spacing    | `--space-2xs` → `--space-2xl`                                                                                    |
+| Radius     | `--radius: 0.25rem`                                                                                              |
+| Shadow     | `--shadow`, `--ring`                                                                                             |
+| Motion     | `--duration-fast`, `--duration-base`, `--easing`                                                                 |
+
+Colors: Flexoki warm paper light (`#fffcf0`) + Gruvbox dark (`#282828`), forest-green accent hue 150.
+All fg/bg pairs WCAG AA+. Verify with: `python3 tools/color.py contrast <fg> <bg>`
+
+The playground (`site/index.html`) imports `tokens/base.css` as its source of truth.
 
 ## Research Structure
 
