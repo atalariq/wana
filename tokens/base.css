@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════════════════
    Design System — base tokens
-   Theme: Proposal D "Forest" (ratified 2026-06-20)
+   Theme: Proposal D "Forest" (see proposals/proposal-D.md)
 
    Authoring model: OKLCH is canonical (perceptual lightness lets us
    re-light the accent per mode by arithmetic). Hex kept as a comment
@@ -77,6 +77,8 @@
   }
 }
 
+/* Explicit dark: lower specificity than the @media block above, so both blocks
+   must stay identical — otherwise this override is silently ignored on dark-OS. */
 [data-theme="dark"] {
   --bg: oklch(27.7% 0 89.9);
   --surface: oklch(31.1% 0.003 48.6);
@@ -90,6 +92,7 @@
   --info: oklch(76.3% 0.101 250.1);
 }
 
+/* Explicit light: lets OS-dark users pin the light palette. */
 [data-theme="light"] {
   --bg: oklch(99% 0.016 95.2);
   --surface: oklch(95.4% 0.015 98.3);
@@ -105,7 +108,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --duration-fast: 0;
-    --duration-base: 0;
+    --duration-fast: 0s;
+    --duration-base: 0s;
   }
 }
