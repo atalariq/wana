@@ -2,8 +2,6 @@
    atalariq design system — playground styles
    The whole UI is built from CSS custom properties, so switching a
    proposal or editing a token re-skins the entire page (dogfooding).
-   Color tokens default to Proposal C; app.js overrides them at runtime
-   via documentElement.style.setProperty().
    ════════════════════════════════════════════════════════════════════ */
 
 /* ── Playground layout variables ────────────────────────────────── */
