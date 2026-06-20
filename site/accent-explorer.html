@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accent Explorer — design system</title>
+    <!--
+      Signature-hue exploration tool.
+
+      For each candidate hue it auto-fits OKLCH lightness (fixed chroma) to hit
+      a fair contrast target against Proposal C's real backgrounds, then renders
+      it in light + dark UI context with the live WCAG ratio. Compare HUES, not
+      accidentally over/under-lit versions.
+
+      Edit CANDIDATES / CONFIG below and reload. No build step.
+    -->
+    <style>
+      :root {
+        /* Light = Flexoki paper · Dark = Gruvbox warm dark (the comfort refs) */
+        --light-bg: #fffcf0;
+        --light-surface: #f2f0e5;
+        --light-text: #100f0f;
+        --light-muted: #6f6e69;
+        --dark-bg: #282828;
+        --dark-surface: #32302f;
+        --dark-text: #ebdbb2;
+        --dark-muted: #928374;
+        --radius: 0.5rem;
+        --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --mono: ui-monospace, "SF Mono", "JetBrains Mono", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: #0e0f13;
+        color: #c8ccd6;
+        line-height: 1.5;
+      }
+      header {
+        padding: 1.75rem clamp(1rem, 4vw, 3rem) 1rem;
+        border-bottom: 1px solid #23252e;
+      }
+      header h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.35rem;
+      }
+      header p {
+        margin: 0;
+        color: #8b909c;
+        max-width: 70ch;
+        font-size: 0.9rem;
+      }
+      .controls {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.85rem clamp(1rem, 4vw, 3rem);
+        border-bottom: 1px solid #23252e;
+        font-size: 0.85rem;
+        color: #8b909c;
+      }
+      .controls label {
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
+      }
+      .controls input[type="range"] {
+        vertical-align: middle;
+      }
+      main {
+        display: grid;
+        gap: 1.1rem;
+        padding: clamp(1rem, 4vw, 3rem);
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 9.5rem 1fr 1fr;
+        gap: 1rem;
+        align-items: stretch;
+      }
+      @media (max-width: 760px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.2rem;
+      }
+      .meta .name {
+        font-size: 1.05rem;
+        font-weight: 650;
+        color: #e6e8ef;
+      }
+      .meta .hue {
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        color: #8b909c;
+      }
+      .meta.baseline .name::after {
+        content: "baseline";
+        margin-left: 0.5rem;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: #0e0f13;
+        background: #8b909c;
+        padding: 0.05rem 0.35rem;
+        border-radius: 1rem;
+        vertical-align: middle;
+      }
+      .card {
+        --bg: var(--light-bg);
+        --surface: var(--light-surface);
+        --text: var(--light-text);
+        --muted: var(--light-muted);
+        background: var(--bg);
+        color: var(--text);
+        border-radius: var(--radius);
+        padding: 1rem 1.1rem;
+        border: 1px solid #00000014;
+      }
+      .card.dark {
+        --bg: var(--dark-bg);
+        --surface: var(--dark-surface);
+        --text: var(--dark-text);
+        --muted: var(--dark-muted);
+        border-color: #ffffff14;
+      }
+      .card h3 {
+        margin: 0 0 0.2rem;
+        font-size: 1rem;
+      }
+      .card h3 a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .card h3 a:hover {
+        text-decoration: underline;
+      }
+      .card p {
+        margin: 0 0 0.7rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .card p a {
+        color: var(--accent);
+        text-underline-offset: 2px;
+      }
+      .card .ui {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        background: var(--accent);
+        color: var(--btn-fg);
+        border: none;
+        border-radius: 0.4rem;
+        padding: 0.4rem 0.8rem;
+        font: inherit;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn.outline {
+        background: transparent;
+        color: var(--accent);
+        border: 1.5px solid var(--accent);
+      }
+      .badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 1rem;
+        background: color-mix(in oklch, var(--accent) 18%, var(--bg));
+        color: var(--accent);
+      }
+      .swatch {
+        width: 1.1rem;
+        height: 1.1rem;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 1px #00000022 inset;
+      }
+      .readout {
+        margin-top: 0.75rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted);
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .grade {
+        font-weight: 700;
+      }
+      .grade.AAA {
+        color: #4caf50;
+      }
+      .grade.AA {
+        color: var(--accent);
+      }
+      .grade.fail {
+        color: #e0564a;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Accent Explorer</h1>
+      <p>
+        Each candidate signature hue, auto-lit (OKLCH, fixed chroma) to a fair
+        contrast target against Proposal&nbsp;C's backgrounds, shown in light
+        and dark UI context. React to the <em>hue</em>. Edit the candidate list
+        at the top of this file's script to add your own.
+      </p>
+    </header>
+    <div class="controls">
+      <label>
+        target contrast
+        <input
+          id="target"
+          type="range"
+          min="4.5"
+          max="8"
+          step="0.25"
+          value="6"
+        />
+        <span id="targetVal">6.0:1</span>
+      </label>
+      <label>
+        chroma ×
+        <input
+          id="chroma"
+          type="range"
+          min="0.4"
+          max="1.6"
+          step="0.1"
+          value="1"
+        />
+        <span id="chromaVal">×1.0</span>
+      </label>
+      <span>links · buttons · badges all use the fitted accent</span>
+    </div>
+    <main id="grid"></main>
+
+    <script>
+      // ── CONFIG ────────────────────────────────────────────────────────────
+      const BG = {
+        light: getComputedStyle(document.documentElement)
+          .getPropertyValue("--light-bg")
+          .trim(),
+        dark: getComputedStyle(document.documentElement)
+          .getPropertyValue("--dark-bg")
+          .trim(),
+      };
+
+      // Candidate signature hues (OKLCH hue angle). Edit freely.
+      // Green family, anchored to the references (Lily Chou-Chou haze →
+      // Everforest olive → WKW emerald/teal). `chroma` is the base; the slider
+      // scales all of them together. Add your own row anytime.
+      const CANDIDATES = [
+        { name: "Sage", hue: 145, chroma: 0.06 }, // Lily Chou-Chou haze, most muted
+        { name: "Everforest", hue: 124, chroma: 0.09, baseline: true }, // = #a7c080
+        { name: "Forest", hue: 151, chroma: 0.1 }, // true green
+        { name: "Jade", hue: 158, chroma: 0.12 },
+        { name: "Emerald", hue: 166, chroma: 0.14 }, // WKW, richer
+        { name: "Pine", hue: 178, chroma: 0.11 }, // teal-leaning, WKW
+        { name: "Olive", hue: 118, chroma: 0.13 }, // earthy yellow-green
+      ];
+
+      // ── COLOR MATH (mirror of tools/color.py) ─────────────────────────────
+      // Resolve any CSS color (incl. oklch) to gamut-clamped sRGB [0..1] via a
+      // 1px canvas — always yields rgba bytes, no getComputedStyle serialization
+      // ambiguity (newer browsers return oklch()/color(srgb ...) there).
+      const _ctx = document.createElement("canvas").getContext("2d");
+      function toRGB(cssColor) {
+        _ctx.fillStyle = "#000";
+        _ctx.fillStyle = cssColor; // invalid input silently keeps prior value
+        _ctx.fillRect(0, 0, 1, 1);
+        const d = _ctx.getImageData(0, 0, 1, 1).data;
+        return [d[0] / 255, d[1] / 255, d[2] / 255];
+      }
+      const lin = (c) =>
+        c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      function luminance([r, g, b]) {
+        return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+      }
+      function contrast(rgb1, rgb2) {
+        const l1 = luminance(rgb1),
+          l2 = luminance(rgb2);
+        const hi = Math.max(l1, l2),
+          lo = Math.min(l1, l2);
+        return (hi + 0.05) / (lo + 0.05);
+      }
+      function grade(r) {
+        if (r >= 7) return "AAA";
+        if (r >= 4.5) return "AA";
+        if (r >= 3) return "AA-large";
+        return "fail";
+      }
+      function hex(rgb) {
+        return (
+          "#" +
+          rgb
+            .map((c) =>
+              Math.round(c * 255)
+                .toString(16)
+                .padStart(2, "0"),
+            )
+            .join("")
+        );
+      }
+
+      // Binary-search lightness (fixed hue/chroma) to hit target contrast vs bg.
+      // Light bg → search darker range; dark bg → lighter range.
+      function fit(hue, chroma, bgHex, target, mode) {
+        const bg = toRGB(bgHex);
+        let lo = mode === "light" ? 0.2 : 0.5;
+        let hi = mode === "light" ? 0.72 : 0.95;
+        let best = null;
+        for (let i = 0; i < 22; i++) {
+          const L = (lo + hi) / 2;
+          const css = `oklch(${(L * 100).toFixed(1)}% ${chroma} ${hue})`;
+          const rgb = toRGB(css);
+          const ratio = contrast(rgb, bg);
+          best = { L, css, rgb, ratio };
+          // vs light bg: lower L = more contrast. vs dark bg: higher L = more contrast.
+          const tooMuch = ratio > target;
+          if (mode === "light") tooMuch ? (lo = L) : (hi = L);
+          else tooMuch ? (hi = L) : (lo = L);
+        }
+        return best;
+      }
+
+      // ── RENDER ────────────────────────────────────────────────────────────
+      const grid = document.getElementById("grid");
+      const targetEl = document.getElementById("target");
+      const chromaEl = document.getElementById("chroma");
+
+      function card(mode, fitres) {
+        const bgRGB = toRGB(BG[mode]);
+        const textRGB = toRGB(
+          getComputedStyle(document.documentElement)
+            .getPropertyValue(`--${mode}-text`)
+            .trim(),
+        );
+        // button text: white or near-black, whichever contrasts the accent more
+        const onWhite = contrast(fitres.rgb, [1, 1, 1]);
+        const onBlack = contrast(fitres.rgb, [0.1, 0.1, 0.13]);
+        const btnFg = onBlack > onWhite ? "#15171d" : "#ffffff";
+        const g = grade(fitres.ratio);
+        return `
+          <div class="card ${mode === "dark" ? "dark" : ""}"
+               style="--accent:${fitres.css}; --btn-fg:${btnFg}">
+            <h3><a href="#">The Art of Reading on Screens</a></h3>
+            <p>Body text with an inline <a href="#">accent link</a> you stare at for minutes.</p>
+            <div class="ui">
+              <button class="btn">Primary</button>
+              <button class="btn outline">Outline</button>
+              <span class="badge">new</span>
+              <span class="swatch"></span>
+            </div>
+            <div class="readout">
+              <span>${hex(fitres.rgb)}</span>
+              <span>${fitres.css.replace("oklch(", "").replace(")", "")}</span>
+              <span class="grade ${g.replace("-large", "")}">${fitres.ratio.toFixed(2)}:1 ${g}</span>
+            </div>
+          </div>`;
+      }
+
+      function render() {
+        const target = +targetEl.value;
+        const scale = +chromaEl.value;
+        document.getElementById("targetVal").textContent =
+          target.toFixed(1) + ":1";
+        document.getElementById("chromaVal").textContent =
+          "×" + scale.toFixed(1);
+        grid.innerHTML = CANDIDATES.map((c) => {
+          const chroma = (c.chroma ?? 0.12) * scale;
+          const light = fit(c.hue, chroma, BG.light, target, "light");
+          const dark = fit(c.hue, chroma, BG.dark, target, "dark");
+          return `
+            <div class="row">
+              <div class="meta ${c.baseline ? "baseline" : ""}">
+                <span class="name">${c.name}</span>
+                <span class="hue">${c.hue}°</span>
+              </div>
+              ${card("light", light)}
+              ${card("dark", dark)}
+            </div>`;
+        }).join("");
+      }
+
+      targetEl.addEventListener("input", render);
+      chromaEl.addEventListener("input", render);
+      render();
+    </script>
+  </body>
+</html>

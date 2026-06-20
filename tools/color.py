@@ -8,6 +8,8 @@ proposals/.
 Usage:
     python3 tools/color.py convert "hsl(40 30% 98%)"
     python3 tools/color.py contrast "#1c1b1a" "#fffcf0"
+    python3 tools/color.py oklch "48.3% 0.10 150" "#fffcf0"  # oklch -> hex (+contrast)
+    python3 tools/color.py fit 0.10 150 "#fffcf0" 6.0 light  # find lightness for target
     python3 tools/color.py table <colors.json>   # batch contrast matrix
 """
 
@@ -117,6 +119,61 @@ def oklch_str(rgb: tuple[float, float, float]) -> str:
     return f"oklch({L}% {C} {H})"
 
 
+def _linear_to_srgb(c: float) -> float:
+    c = max(0.0, min(1.0, c))  # clamp out-of-gamut, matching the browser canvas
+    return 12.92 * c if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) - 0.055
+
+
+def oklch_to_rgb(L: float, C: float, H: float) -> tuple[float, float, float]:
+    """OKLCH (L in [0,1]) → gamut-clamped sRGB floats in [0,1]."""
+    h = math.radians(H)
+    a, b = C * math.cos(h), C * math.sin(h)
+    l_ = L + 0.3963377774 * a + 0.2158037573 * b
+    m_ = L - 0.1055613458 * a - 0.0638541728 * b
+    s_ = L - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = l_**3, m_**3, s_**3
+    r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
+    g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
+    bb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+    return tuple(_linear_to_srgb(c) for c in (r, g, bb))  # type: ignore
+
+
+def parse_oklch(spec: str) -> tuple[float, float, float]:
+    """Parse 'oklch(50% 0.1 150)' or '50 0.1 150' → (L[0,1], C, H)."""
+    s = spec.strip().lower().replace("oklch(", "").replace(")", "").replace("%", "")
+    parts = re.split(r"[ ,/]+", s.strip())
+    L, C, H = float(parts[0]), float(parts[1]), float(parts[2])
+    if L > 1:  # accept percent form
+        L /= 100
+    return L, C, H
+
+
+def fit_lightness(
+    C: float, H: float, bg: str, target: float, mode: str
+) -> tuple[float, tuple[float, float, float], float]:
+    """Binary-search OKLCH lightness (fixed C/H) to hit `target` contrast vs bg.
+
+    mode='light' → dark accent on a light bg; 'dark' → light accent on dark bg.
+    Returns (L[0,1], rgb, ratio).
+    """
+    lo, hi = (0.15, 0.75) if mode == "light" else (0.5, 0.97)
+    bg_lum = relative_luminance(parse(bg))
+    best = (0.0, (0.0, 0.0, 0.0), 0.0)
+    for _ in range(28):
+        L = (lo + hi) / 2
+        rgb = oklch_to_rgb(L, C, H)
+        fg_lum = relative_luminance(rgb)
+        ph, pl = max(fg_lum, bg_lum), min(fg_lum, bg_lum)
+        ratio = (ph + 0.05) / (pl + 0.05)
+        best = (L, rgb, ratio)
+        too_much = ratio > target
+        if mode == "light":
+            lo, hi = (L, hi) if too_much else (lo, L)
+        else:
+            lo, hi = (lo, L) if too_much else (L, hi)
+    return best
+
+
 # ---------------------------------------------------------------------------
 # WCAG contrast
 # ---------------------------------------------------------------------------
@@ -174,6 +231,25 @@ def cmd_contrast(c1: str, c2: str) -> None:
     print(f"large : {wcag_grade(r, large=True)}")
 
 
+def cmd_oklch(spec: str, bg: str | None = None) -> None:
+    """oklch '50% 0.1 150' [bg] → hex + (optional) contrast vs bg."""
+    L, C, H = parse_oklch(spec)
+    rgb = oklch_to_rgb(L, C, H)
+    print(f"oklch : oklch({L * 100:.1f}% {C} {H})")
+    print(f"hex   : {rgb_to_hex(rgb)}")
+    if bg:
+        r = contrast(rgb_to_hex(rgb), bg)
+        print(f"vs {bg}: {r:.2f}:1  normal {wcag_grade(r)}")
+
+
+def cmd_fit(C: str, H: str, bg: str, target: str, mode: str) -> None:
+    """fit <C> <H> <bg> <target> <light|dark> → lightness hitting target contrast."""
+    L, rgb, ratio = fit_lightness(float(C), float(H), bg, float(target), mode)
+    print(f"oklch : oklch({L * 100:.1f}% {C} {H})")
+    print(f"hex   : {rgb_to_hex(rgb)}")
+    print(f"vs {bg}: {ratio:.2f}:1  normal {wcag_grade(ratio)}")
+
+
 def cmd_table(path: str) -> None:
     """colors.json: {"fg": {...}, "bg": {...}} -> contrast matrix (markdown)."""
     data = json.load(open(path))
@@ -200,6 +276,10 @@ if __name__ == "__main__":
         cmd_convert(rest[0])
     elif cmd == "contrast":
         cmd_contrast(rest[0], rest[1])
+    elif cmd == "oklch":
+        cmd_oklch(rest[0], rest[1] if len(rest) > 1 else None)
+    elif cmd == "fit":
+        cmd_fit(*rest)
     elif cmd == "table":
         cmd_table(rest[0])
     else:
