@@ -109,6 +109,33 @@ const PROPOSALS = {
       info: "#79b0e6",
     },
   },
+  D: {
+    name: "Forest",
+    light: {
+      bg: "#fffcf0",
+      surface: "#f2f0e5",
+      overlay: "#e6e4d9",
+      text: "#100f0f",
+      muted: "#6f6e69",
+      accent: "#2d6e3f",
+      success: "#5f7a0a",
+      warning: "#a06300",
+      error: "#bc4039",
+      info: "#1c6aae",
+    },
+    dark: {
+      bg: "#282828",
+      surface: "#32302f",
+      overlay: "#3c3836",
+      text: "#ebdbb2",
+      muted: "#a89984",
+      accent: "#7abb87",
+      success: "#9fbe5c",
+      warning: "#eeb562",
+      error: "#fe8b89",
+      info: "#80b7f0",
+    },
+  },
 };
 
 /* ═══════════════════════ COLOR MATH (port of color.py) ═══════════════ */
