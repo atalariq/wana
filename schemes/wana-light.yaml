@@ -1,0 +1,30 @@
+system: "base24"
+name: "Wana Light"
+author: "atalariq"
+variant: "light"
+# Brights (base12-17) = tools/color.py bright_variant(normal, fg_is_light=False).
+palette:
+  base00: "fffcf0"  # bg / paper
+  base01: "f2f0e5"  # surface
+  base02: "e6e4d9"  # overlay / selection
+  base03: "6f6e69"  # muted / comments
+  base04: "878580"  # dark fg
+  base05: "100f0f"  # text
+  base06: "1c1b1a"  # light fg (Flexoki convention: deeper than text)
+  base07: "282726"  # lightest fg
+  base08: "bc4039"  # red     = error
+  base09: "a06300"  # orange  = warning
+  base0A: "956c00"  # yellow  (Flexoki, AA-fitted)
+  base0B: "2d6e3f"  # green   = accent
+  base0C: "218078"  # cyan    (Flexoki, AA-fitted)
+  base0D: "1c6aae"  # blue    = info
+  base0E: "a02f6f"  # magenta (Flexoki 600)
+  base0F: "8a6240"  # brown
+  base10: "e1ddc9"  # darker bg
+  base11: "d4cfb8"  # darkest bg
+  base12: "a61619"  # br-red
+  base13: "805300"  # br-yellow
+  base14: "015826"  # br-green
+  base15: "006a62"  # br-cyan
+  base16: "00529b"  # br-blue
+  base17: "8a0059"  # br-magenta

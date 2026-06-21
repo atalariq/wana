@@ -85,5 +85,21 @@ class TestWanaDarkContrast(unittest.TestCase):
             self.assertGreaterEqual(contrast(c, bg), 4.5, f"color{i} {c} fails AA")
 
 
+class TestWanaLightContrast(unittest.TestCase):
+    def test_all_ansi_pass_aa(self):
+        from scheme import load
+        from color import contrast
+
+        s = load(
+            os.path.join(os.path.dirname(__file__), "..", "schemes", "wana-light.yaml")
+        )
+        bg = s.hex("base00")
+        for i, c in enumerate(s.ansi16()):
+            # color0 = base01 (surface); color8 = base03 (muted). Both exempt.
+            if i in (0, 8):
+                continue
+            self.assertGreaterEqual(contrast(c, bg), 4.5, f"color{i} {c} fails AA")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
