@@ -46,6 +46,14 @@ proposals/
   proposal-C.md
 tokens/
   base.css                 # The chosen baseline token file
+schemes/
+  wana-light.yaml          # canonical base24 palette (light)
+  wana-dark.yaml           # canonical base24 palette (dark)
+tools/
+  gen.py                   # schemes -> themes/
+  scheme.py                # base24 loader + ANSI-16 mapping
+themes/                    # GENERATED app themes (do not hand-edit)
+  kitty/
 ```
 
 ## Commit Conventions

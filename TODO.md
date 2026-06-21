@@ -13,18 +13,19 @@ Source colors today: `tools/proposals.json` (`D-light` / `D-dark`) and
 
 ## Phase 0 — Prerequisites (do these first)
 
-- [ ] **Extend the palette to a full ANSI-16 set.** Wana currently has no
+- [x] **Extend the palette to a full ANSI-16 set.** Wana currently has no
       dedicated **magenta** or **cyan**, and no **bright** variants — terminals
       (kitty/alacritty), Neovim, and Noctalia all need the full 16. Define
       `normal` + `bright` for black/red/green/yellow/blue/magenta/cyan/white in
       both flavors, fit for legibility, verify contrast.
-- [ ] **Adopt a canonical palette file.** Author a **base24** scheme
+- [x] **Adopt a canonical palette file.** Author a **base24** scheme
       (`wana-light.yaml` / `wana-dark.yaml`, tinted-theming/schemes style) as the
       single source of truth — base24 carries the ANSI brights terminals need.
       Everything below generates from it. (Alt: extend `tools/proposals.json`.)
-- [ ] **Pick the generation path.** Use **tinted-theming (`tinty`)** templates
+- [x] **Pick the generation path.** Use **tinted-theming (`tinty`)** templates
       for supported apps (kitty, alacritty, bat, fzf, btop, starship, delta… come
       almost for free once the base24 scheme exists); hand-write the rest.
+      _(Chosen: in-repo Python generator `tools/gen.py`; tinty not adopted.)_
 
 ## Phase 1 — Core targets
 
@@ -55,7 +56,7 @@ Source colors today: `tools/proposals.json` (`D-light` / `D-dark`) and
 - [ ] **Codex** — CLI, terminal-color driven; likely covered by the kitty/
       alacritty ANSI palette. Confirm.
 - [ ] **Hermes** — apply Wana to its site/styles (it can `@import` `tokens/
-    base.css` or consume the generated CSS).
+base.css` or consume the generated CSS).
 - [ ] **Others** (`dsb.`) — bat, delta, fzf, btop, starship, zsh/prompt: mostly
       free via tinted-theming base16/base24 templates once Phase 0 lands.
 

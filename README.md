@@ -133,6 +133,14 @@ This system uses `oklch()` and `color-mix()`. Modern evergreen browsers only (Ch
 
 ---
 
+## App themes
+
+Terminal/editor themes are generated from the canonical base24 schemes in
+`schemes/` by `tools/gen.py`, into `themes/` (never hand-edited). Regenerate
+with `python3 tools/gen.py`; freshness is checked with `python3 tools/gen.py --check`.
+
+---
+
 ## Playground
 
 `site/index.html` is a live, no-build token playground with an editor, contrast checker, and import/export. It dogfoods `tokens/base.css` directly as its source of truth.
