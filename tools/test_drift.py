@@ -30,10 +30,10 @@ def css_hex_comments(block):
 
 
 class TestDrift(unittest.TestCase):
-    def _check(self, scheme_file, proposal_key, css_selector):
+    def _check(self, scheme_file, proposal_key, block_pattern):
         with open(os.path.join(ROOT, "tokens", "base.css")) as f:
             css = f.read()
-        block = re.search(css_selector + r"\s*\{([^}]+)\}", css, re.DOTALL).group(1)
+        block = re.search(block_pattern, css, re.DOTALL).group(1)
         css_roles = css_hex_comments(block)
         with open(os.path.join(ROOT, "tools", "proposals.json")) as f:
             prop = json.load(f)[proposal_key]
@@ -45,16 +45,25 @@ class TestDrift(unittest.TestCase):
                 prop[role],
                 f"{scheme_file}:{slot} vs proposals {proposal_key}:{role}",
             )
-            if role in css_roles:  # not every role carries a hex comment
-                self.assertEqual(
-                    sv, css_roles[role], f"{scheme_file}:{slot} vs base.css {role}"
-                )
+            # Every shared role carries a /* #hex */ comment in both blocks, so
+            # the CSS check is mandatory — a missing comment is itself drift.
+            self.assertIn(role, css_roles, f"{scheme_file}: no base.css hex for {role}")
+            self.assertEqual(
+                sv, css_roles[role], f"{scheme_file}:{slot} vs base.css {role}"
+            )
 
     def test_light(self):
-        self._check("wana-light.yaml", "D-light", r":root")
+        # First ':root { ... }' block = the light token defaults.
+        self._check("wana-light.yaml", "D-light", r":root\s*\{([^}]+)\}")
 
     def test_dark(self):
-        self._check("wana-dark.yaml", "D-dark", r'\[data-theme="dark"\]')
+        # The @media dark block carries the hex comments; the bare
+        # [data-theme="dark"] block does not, so parse the @media one.
+        self._check(
+            "wana-dark.yaml",
+            "D-dark",
+            r'prefers-color-scheme:\s*dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{([^}]+)\}',
+        )
 
 
 if __name__ == "__main__":

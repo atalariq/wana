@@ -5,6 +5,8 @@
     python3 tools/gen.py --check  # exit 1 if any committed theme is stale
 
 Add a new target by writing tools/templates/<x> and a render_<x>() below.
+Templates are str.format strings: any LITERAL brace in a target's config
+(e.g. JSON for noctalia) must be escaped as {{ }} or it will break rendering.
 """
 
 from __future__ import annotations

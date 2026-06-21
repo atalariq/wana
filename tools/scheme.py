@@ -13,7 +13,10 @@ import yaml
 
 SLOTS = [f"base{n:02X}" for n in range(24)]  # base00..base17 (hex-cased)
 
-# Standard base24 -> 16-colour terminal mapping (index = ANSI colour number).
+# base24 -> 16-colour terminal mapping (index = ANSI colour number).
+# color0 ("black") uses base01 (surface), not base00 (bg), so the dim black
+# lifts off the terminal background instead of vanishing into it. Colours
+# 1-15 follow the standard tinted-theming base24 mapping.
 ANSI16_SLOTS = [
     "base01",
     "base08",

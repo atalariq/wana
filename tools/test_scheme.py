@@ -101,5 +101,37 @@ class TestWanaLightContrast(unittest.TestCase):
             self.assertGreaterEqual(contrast(c, bg), 4.5, f"color{i} {c} fails AA")
 
 
+class TestBrightInvariant(unittest.TestCase):
+    """Each chromatic bright must equal bright_variant(its normal) — the rule
+    the scheme comments claim. Guards against editing a normal but not its bright."""
+
+    PAIRS = [
+        ("base08", "base12"),
+        ("base0A", "base13"),
+        ("base0B", "base14"),
+        ("base0C", "base15"),
+        ("base0D", "base16"),
+        ("base0E", "base17"),
+    ]
+
+    def _check(self, fname, fg_is_light):
+        from scheme import load
+        from color import bright_variant
+
+        s = load(os.path.join(os.path.dirname(__file__), "..", "schemes", fname))
+        for normal, bright in self.PAIRS:
+            self.assertEqual(
+                s.hex(bright),
+                bright_variant(s.hex(normal), fg_is_light),
+                f"{fname}:{bright} != bright_variant({normal})",
+            )
+
+    def test_dark(self):
+        self._check("wana-dark.yaml", True)
+
+    def test_light(self):
+        self._check("wana-light.yaml", False)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
