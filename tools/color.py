@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Color math for the design system.
+"""Color math for Wana.
 
 Computes WCAG contrast ratios and OKLCH conversions from real math
 (no guessing). Used to generate the contrast tables in research/ and

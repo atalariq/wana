@@ -1,4 +1,4 @@
-# design-system
+# Wana
 
 A personal CSS custom-property design system used across atalariq's sites — Journey, Portfolio, and Research. No build step, no framework, no preprocessor. Drop in one CSS file and use `var(--token)`. The ratified palette is **Wana** (Proposal D), with two flavors: **Wana Light** (warm Flexoki paper) and **Wana Dark** (Gruvbox warm-dark), tied together by a forest-green accent (OKLCH hue 150).
 
