@@ -35,7 +35,8 @@ def _kitty_fields(s: Scheme) -> dict:
 
 
 def render_kitty(s: Scheme) -> tuple[str, str]:
-    tpl = open(os.path.join(TPL, "kitty.conf.tmpl")).read()
+    with open(os.path.join(TPL, "kitty.conf.tmpl")) as f:
+        tpl = f.read()
     out = tpl.format(**_kitty_fields(s))
     rel = f"themes/kitty/wana-{s.variant}.conf"
     return rel, out
@@ -61,7 +62,11 @@ def main(argv: list[str]) -> int:
     stale = []
     for rel, content in files.items():
         path = os.path.join(ROOT, rel)
-        existing = open(path).read() if os.path.exists(path) else None
+        if os.path.exists(path):
+            with open(path) as f:
+                existing = f.read()
+        else:
+            existing = None
         if check:
             if existing != content:
                 stale.append(rel)

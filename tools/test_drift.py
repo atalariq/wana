@@ -31,12 +31,12 @@ def css_hex_comments(block):
 
 class TestDrift(unittest.TestCase):
     def _check(self, scheme_file, proposal_key, css_selector):
-        css = open(os.path.join(ROOT, "tokens", "base.css")).read()
+        with open(os.path.join(ROOT, "tokens", "base.css")) as f:
+            css = f.read()
         block = re.search(css_selector + r"\s*\{([^}]+)\}", css, re.DOTALL).group(1)
         css_roles = css_hex_comments(block)
-        prop = json.load(open(os.path.join(ROOT, "tools", "proposals.json")))[
-            proposal_key
-        ]
+        with open(os.path.join(ROOT, "tools", "proposals.json")) as f:
+            prop = json.load(f)[proposal_key]
         s = load(os.path.join(ROOT, "schemes", scheme_file))
         for role, slot in SHARED.items():
             sv = s.hex(slot)
