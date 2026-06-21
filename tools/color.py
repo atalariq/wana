@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Color math for the design system.
+"""Color math for Wana.
 
 Computes WCAG contrast ratios and OKLCH conversions from real math
 (no guessing). Used to generate the contrast tables in research/ and
@@ -136,6 +136,21 @@ def oklch_to_rgb(L: float, C: float, H: float) -> tuple[float, float, float]:
     g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
     bb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
     return tuple(_linear_to_srgb(c) for c in (r, g, bb))  # type: ignore
+
+
+def bright_variant(
+    hex_color: str, fg_is_light: bool, dL: float = 0.08, dC: float = 1.10
+) -> str:
+    """ANSI 'bright' variant: shift OKLCH lightness toward the fg end.
+
+    fg_is_light=True  (dark theme)  -> lighter bright (L += dL)
+    fg_is_light=False (light theme) -> deeper bright  (L -= dL)
+    Chroma is nudged by dC; result is gamut-clamped by oklch_to_rgb.
+    """
+    L, C, H = rgb_to_oklch(hex_to_rgb(hex_color))
+    L /= 100  # rgb_to_oklch returns L as a percentage
+    L = min(0.98, L + dL) if fg_is_light else max(0.10, L - dL)
+    return rgb_to_hex(oklch_to_rgb(L, C * dC, H))
 
 
 def parse_oklch(spec: str) -> tuple[float, float, float]:

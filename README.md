@@ -1,4 +1,4 @@
-# design-system
+# Wana
 
 A personal CSS custom-property design system used across atalariq's sites — Journey, Portfolio, and Research. No build step, no framework, no preprocessor. Drop in one CSS file and use `var(--token)`. The ratified palette is **Wana** (Proposal D), with two flavors: **Wana Light** (warm Flexoki paper) and **Wana Dark** (Gruvbox warm-dark), tied together by a forest-green accent (OKLCH hue 150).
 
@@ -130,6 +130,14 @@ Every shipped fg/bg pair is WCAG AA or better. See `research/accessibility.md` a
 ## Browser support
 
 This system uses `oklch()` and `color-mix()`. Modern evergreen browsers only (Chrome 111+, Firefox 113+, Safari 16.4+). No fallback hex values are shipped — if you need IE or older support, this is the wrong tool.
+
+---
+
+## App themes
+
+Terminal/editor themes are generated from the canonical base24 schemes in
+`schemes/` by `tools/gen.py`, into `themes/` (never hand-edited). Regenerate
+with `python3 tools/gen.py`; freshness is checked with `python3 tools/gen.py --check`.
 
 ---
 
