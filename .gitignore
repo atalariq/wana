@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+.superpowers/
+proposals/
+research/
+research-prompt.md
+audit-followups.md
+TODO.md

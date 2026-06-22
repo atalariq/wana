@@ -1,0 +1,31 @@
+system: "base24"
+name: "Wana Dark"
+author: "atalariq"
+variant: "dark"
+# Brights (base12-17) are produced by tools/color.py
+# bright_variant(normal, fg_is_light=True); the scheme test enforces it.
+palette:
+  base00: "282828"  # bg
+  base01: "32302f"  # surface
+  base02: "3c3836"  # overlay / selection
+  base03: "a89984"  # muted / comments
+  base04: "bdae93"  # dark fg (status bars)
+  base05: "ebdbb2"  # text
+  base06: "f2e5bc"  # light fg
+  base07: "fbf1c7"  # lightest
+  base08: "fe8b89"  # red     = error
+  base09: "eeb562"  # orange  = warning
+  base0A: "fabd2f"  # yellow  (Gruvbox)
+  base0B: "7abb87"  # green   = accent
+  base0C: "8ec07c"  # cyan    (Gruvbox aqua)
+  base0D: "80b7f0"  # blue    = info
+  base0E: "d3869b"  # magenta (Gruvbox purple)
+  base0F: "bb8e6e"  # brown
+  base10: "1d2021"  # darker bg
+  base11: "161616"  # darkest bg
+  base12: "ffa09d"  # br-red
+  base13: "ffd636"  # br-yellow  (= bright_variant base0A)
+  base14: "8dd69c"  # br-green
+  base15: "a3dc8f"  # br-cyan
+  base16: "93d1ff"  # br-blue
+  base17: "f39bb3"  # br-magenta
