@@ -128,6 +128,14 @@ def render_opencode(s: Scheme) -> tuple[str, str]:
     return "themes/opencode/wana.json", out
 
 
+def render_tmux(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "tmux.conf.tmpl")) as f:
+        tpl = f.read()
+    out = tpl.format(**_term_fields(s))
+    rel = f"themes/tmux/wana-{s.variant}.conf"
+    return rel, out
+
+
 RENDERERS = [
     render_kitty,
     render_alacritty,
@@ -139,6 +147,7 @@ RENDERERS = [
     render_btop,
     render_lazygit,
     render_opencode,
+    render_tmux,
 ]
 
 

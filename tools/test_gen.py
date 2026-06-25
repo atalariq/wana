@@ -92,6 +92,14 @@ class TestGen(unittest.TestCase):
         self.assertIn("dark", data["theme"]["primary"])
         self.assertIn("light", data["theme"]["text"])
 
+    def test_tmux_has_styles(self):
+        files = gen.build()
+        dark = files["themes/tmux/wana-dark.conf"]
+        self.assertIn("status-style", dark)
+        self.assertIn("pane-active-border-style", dark)
+        self.assertEqual(dark.count("set -g "), 9)
+        self.assertIn("fg=#", dark)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):
