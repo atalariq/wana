@@ -76,6 +76,13 @@ class TestGen(unittest.TestCase):
         self.assertEqual(dark.count("theme["), 37)
         self.assertIn('theme[main_bg]="#', dark)
 
+    def test_lazygit_theme_block(self):
+        files = gen.build()
+        out = files["themes/lazygit/wana.yml"]
+        self.assertIn("activeBorderColor", out)
+        self.assertIn("defaultFgColor", out)
+        self.assertIn('"#', out)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):

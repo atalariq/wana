@@ -110,6 +110,15 @@ def render_btop(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
+def render_lazygit(s: Scheme) -> tuple[str, str]:
+    d = _scheme("dark")
+    with open(os.path.join(TPL, "lazygit.yml.tmpl")) as f:
+        tpl = f.read()
+    fields = {f"base{n:02X}": d.hex(f"base{n:02X}") for n in range(16)}
+    out = tpl.format(**fields)
+    return "themes/lazygit/wana.yml", out
+
+
 RENDERERS = [
     render_kitty,
     render_alacritty,
@@ -119,6 +128,7 @@ RENDERERS = [
     render_bat,
     render_starship,
     render_btop,
+    render_lazygit,
 ]
 
 
