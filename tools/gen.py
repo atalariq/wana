@@ -71,7 +71,15 @@ def render_pywal(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
-RENDERERS = [render_kitty, render_alacritty, render_tty, render_pywal]
+def render_fzf(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "fzf.opts.tmpl")) as f:
+        tpl = f.read()
+    out = tpl.format(**_term_fields(s))
+    rel = f"themes/fzf/wana-{s.variant}.opts"
+    return rel, out
+
+
+RENDERERS = [render_kitty, render_alacritty, render_tty, render_pywal, render_fzf]
 
 
 def build() -> dict:

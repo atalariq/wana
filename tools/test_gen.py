@@ -46,8 +46,17 @@ class TestGen(unittest.TestCase):
         self.assertIn("background", data["special"])
         self.assertTrue(data["colors"]["color0"].startswith("#"))
 
+    def test_fzf_opts_color_string(self):
+        files = gen.build()
+        dark = files["themes/fzf/wana-dark.opts"]
+        self.assertTrue(dark.startswith("--color="))
+        self.assertIn("prompt:#", dark)
+        self.assertIn("pointer:#", dark)
+
     def test_generated_header_present(self):
-        for content in gen.build().values():
+        for rel, content in gen.build().items():
+            if rel.endswith(".opts"):
+                continue  # single-line opts file has no comment syntax
             self.assertIn("GENERATED", content)
 
 
