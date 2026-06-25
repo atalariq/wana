@@ -83,6 +83,15 @@ class TestGen(unittest.TestCase):
         self.assertIn("defaultFgColor", out)
         self.assertIn('"#', out)
 
+    def test_opencode_is_valid_json(self):
+        import json
+
+        files = gen.build()
+        data = json.loads(files["themes/opencode/wana.json"])
+        self.assertEqual(len(data["defs"]), 16)
+        self.assertIn("dark", data["theme"]["primary"])
+        self.assertIn("light", data["theme"]["text"])
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):

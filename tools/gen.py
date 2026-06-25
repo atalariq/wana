@@ -119,6 +119,15 @@ def render_lazygit(s: Scheme) -> tuple[str, str]:
     return "themes/lazygit/wana.yml", out
 
 
+def render_opencode(s: Scheme) -> tuple[str, str]:
+    d = _scheme("dark")
+    with open(os.path.join(TPL, "opencode.json.tmpl")) as f:
+        tpl = f.read()
+    fields = {f"base{n:02X}": d.hex(f"base{n:02X}") for n in range(16)}
+    out = tpl.format(**fields)
+    return "themes/opencode/wana.json", out
+
+
 RENDERERS = [
     render_kitty,
     render_alacritty,
@@ -129,6 +138,7 @@ RENDERERS = [
     render_starship,
     render_btop,
     render_lazygit,
+    render_opencode,
 ]
 
 
