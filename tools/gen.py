@@ -52,7 +52,18 @@ def render_alacritty(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
-RENDERERS = [render_kitty, render_alacritty]
+def render_tty(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "tty.sh.tmpl")) as f:
+        tpl = f.read()
+    a = s.ansi16()
+    fields = {"name": s.name}
+    fields.update({f"c{i}s": a[i].lstrip("#") for i in range(16)})
+    out = tpl.format(**fields)
+    rel = f"themes/tty/wana-{s.variant}.sh"
+    return rel, out
+
+
+RENDERERS = [render_kitty, render_alacritty, render_tty]
 
 
 def build() -> dict:

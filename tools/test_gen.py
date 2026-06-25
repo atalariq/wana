@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""gen.py contract: --check is clean after a build, kitty has 16 colors."""
+"""gen.py contract: --check is clean after a build; each target carries its colors."""
 
 import os, sys, unittest
 
@@ -29,6 +29,13 @@ class TestGen(unittest.TestCase):
         self.assertEqual(
             dark.count(' = "'), 8 + 8 + 2 + 2 + 2
         )  # +primary/cursor/selection
+
+    def test_tty_has_16_sequences(self):
+        files = gen.build()
+        dark = files["themes/tty/wana-dark.sh"]
+        self.assertEqual(dark.count(r"\e]P"), 16)
+        seq = next(ln for ln in dark.splitlines() if r"\e]P" in ln)
+        self.assertNotIn("#", seq)  # TTY hex must be bare (no leading '#')
 
     def test_generated_header_present(self):
         for content in gen.build().values():
