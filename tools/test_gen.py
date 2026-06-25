@@ -19,6 +19,17 @@ class TestGen(unittest.TestCase):
             sum(1 for ln in dark.splitlines() if ln.startswith("color")), 16
         )
 
+    def test_alacritty_has_16_colors(self):
+        files = gen.build()
+        dark = files["themes/alacritty/wana-dark.toml"]
+        names = ("black", "red", "green", "yellow", "blue", "magenta", "cyan", "white")
+        for name in names:
+            self.assertIn(name, dark)
+        # 8 normal + 8 bright assignments
+        self.assertEqual(
+            dark.count(' = "'), 8 + 8 + 2 + 2 + 2
+        )  # +primary/cursor/selection
+
     def test_generated_header_present(self):
         for content in gen.build().values():
             self.assertIn("GENERATED", content)

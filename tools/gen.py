@@ -22,7 +22,7 @@ TPL = os.path.join(os.path.dirname(__file__), "templates")
 SCHEMES = {"dark": "wana-dark.yaml", "light": "wana-light.yaml"}
 
 
-def _kitty_fields(s: Scheme) -> dict:
+def _term_fields(s: Scheme) -> dict:
     a = s.ansi16()
     fields = {f"c{i}": a[i] for i in range(16)}
     fields.update(
@@ -39,12 +39,20 @@ def _kitty_fields(s: Scheme) -> dict:
 def render_kitty(s: Scheme) -> tuple[str, str]:
     with open(os.path.join(TPL, "kitty.conf.tmpl")) as f:
         tpl = f.read()
-    out = tpl.format(**_kitty_fields(s))
+    out = tpl.format(**_term_fields(s))
     rel = f"themes/kitty/wana-{s.variant}.conf"
     return rel, out
 
 
-RENDERERS = [render_kitty]
+def render_alacritty(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "alacritty.toml.tmpl")) as f:
+        tpl = f.read()
+    out = tpl.format(**_term_fields(s))
+    rel = f"themes/alacritty/wana-{s.variant}.toml"
+    return rel, out
+
+
+RENDERERS = [render_kitty, render_alacritty]
 
 
 def build() -> dict:
