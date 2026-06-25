@@ -53,6 +53,15 @@ class TestGen(unittest.TestCase):
         self.assertIn("prompt:#", dark)
         self.assertIn("pointer:#", dark)
 
+    def test_bat_tmtheme_is_valid_xml(self):
+        import xml.etree.ElementTree as ET
+
+        files = gen.build()
+        dark = files["themes/bat/wana-dark.tmTheme"]
+        ET.fromstring(dark)  # raises if malformed
+        self.assertIn("wana-dark", dark)
+        self.assertIn("#", dark)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):

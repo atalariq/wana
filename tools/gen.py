@@ -79,7 +79,24 @@ def render_fzf(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
-RENDERERS = [render_kitty, render_alacritty, render_tty, render_pywal, render_fzf]
+def render_bat(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "bat.tmTheme.tmpl")) as f:
+        tpl = f.read()
+    fields = {"name": f"wana-{s.variant}"}
+    fields.update({f"base{n:02X}": s.hex(f"base{n:02X}") for n in range(16)})
+    out = tpl.format(**fields)
+    rel = f"themes/bat/wana-{s.variant}.tmTheme"
+    return rel, out
+
+
+RENDERERS = [
+    render_kitty,
+    render_alacritty,
+    render_tty,
+    render_pywal,
+    render_fzf,
+    render_bat,
+]
 
 
 def build() -> dict:
