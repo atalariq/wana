@@ -70,6 +70,12 @@ class TestGen(unittest.TestCase):
         self.assertIn("surface0", out)
         self.assertEqual(out.count(' = "#'), 30)
 
+    def test_btop_has_37_keys(self):
+        files = gen.build()
+        dark = files["themes/btop/wana-dark.theme"]
+        self.assertEqual(dark.count("theme["), 37)
+        self.assertIn('theme[main_bg]="#', dark)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):

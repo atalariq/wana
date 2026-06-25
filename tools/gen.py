@@ -102,6 +102,14 @@ def render_starship(s: Scheme) -> tuple[str, str]:
     return "themes/starship/wana.toml", out
 
 
+def render_btop(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "btop.theme.tmpl")) as f:
+        tpl = f.read()
+    out = tpl.format(**_term_fields(s))
+    rel = f"themes/btop/wana-{s.variant}.theme"
+    return rel, out
+
+
 RENDERERS = [
     render_kitty,
     render_alacritty,
@@ -110,6 +118,7 @@ RENDERERS = [
     render_fzf,
     render_bat,
     render_starship,
+    render_btop,
 ]
 
 
