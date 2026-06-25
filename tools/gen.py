@@ -22,6 +22,10 @@ TPL = os.path.join(os.path.dirname(__file__), "templates")
 SCHEMES = {"dark": "wana-dark.yaml", "light": "wana-light.yaml"}
 
 
+def _scheme(variant: str) -> Scheme:
+    return load(os.path.join(ROOT, "schemes", SCHEMES[variant]))
+
+
 def _term_fields(s: Scheme) -> dict:
     a = s.ansi16()
     fields = {f"c{i}": a[i] for i in range(16)}
@@ -89,6 +93,15 @@ def render_bat(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
+def render_starship(s: Scheme) -> tuple[str, str]:
+    d = _scheme("dark")
+    with open(os.path.join(TPL, "starship.toml.tmpl")) as f:
+        tpl = f.read()
+    fields = {f"base{n:02X}": d.hex(f"base{n:02X}") for n in range(24)}
+    out = tpl.format(**fields)
+    return "themes/starship/wana.toml", out
+
+
 RENDERERS = [
     render_kitty,
     render_alacritty,
@@ -96,6 +109,7 @@ RENDERERS = [
     render_pywal,
     render_fzf,
     render_bat,
+    render_starship,
 ]
 
 

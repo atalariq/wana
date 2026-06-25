@@ -62,6 +62,14 @@ class TestGen(unittest.TestCase):
         self.assertIn("wana-dark", dark)
         self.assertIn("#", dark)
 
+    def test_starship_palette_block(self):
+        files = gen.build()
+        out = files["themes/starship/wana.toml"]
+        self.assertIn("[palettes.wana]", out)
+        self.assertIn("blue", out)
+        self.assertIn("surface0", out)
+        self.assertEqual(out.count(' = "#'), 30)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):
