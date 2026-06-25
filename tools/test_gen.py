@@ -37,6 +37,15 @@ class TestGen(unittest.TestCase):
         seq = next(ln for ln in dark.splitlines() if r"\e]P" in ln)
         self.assertNotIn("#", seq)  # TTY hex must be bare (no leading '#')
 
+    def test_pywal_is_valid_json_16_colors(self):
+        import json
+
+        files = gen.build()
+        data = json.loads(files["themes/pywal/wana-dark.json"])
+        self.assertEqual(len(data["colors"]), 16)
+        self.assertIn("background", data["special"])
+        self.assertTrue(data["colors"]["color0"].startswith("#"))
+
     def test_generated_header_present(self):
         for content in gen.build().values():
             self.assertIn("GENERATED", content)

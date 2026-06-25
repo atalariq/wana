@@ -63,7 +63,15 @@ def render_tty(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
-RENDERERS = [render_kitty, render_alacritty, render_tty]
+def render_pywal(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "pywal.json.tmpl")) as f:
+        tpl = f.read()
+    out = tpl.format(**_term_fields(s))
+    rel = f"themes/pywal/wana-{s.variant}.json"
+    return rel, out
+
+
+RENDERERS = [render_kitty, render_alacritty, render_tty, render_pywal]
 
 
 def build() -> dict:
