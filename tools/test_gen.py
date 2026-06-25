@@ -100,6 +100,14 @@ class TestGen(unittest.TestCase):
         self.assertEqual(dark.count("set -g "), 9)
         self.assertIn("fg=#", dark)
 
+    def test_herdr_theme_block(self):
+        files = gen.build()
+        out = files["themes/herdr/wana.toml"]
+        self.assertIn("[theme.custom]", out)
+        for key in ("panel_bg", "accent", "green", "blue", "red", "yellow"):
+            self.assertIn(key, out)
+        self.assertIn('"#', out)
+
     def test_generated_header_present(self):
         for rel, content in gen.build().items():
             if rel.endswith(".opts"):

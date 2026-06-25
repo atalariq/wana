@@ -128,6 +128,15 @@ def render_opencode(s: Scheme) -> tuple[str, str]:
     return "themes/opencode/wana.json", out
 
 
+def render_herdr(s: Scheme) -> tuple[str, str]:
+    d = _scheme("dark")
+    with open(os.path.join(TPL, "herdr.toml.tmpl")) as f:
+        tpl = f.read()
+    fields = {f"base{n:02X}": d.hex(f"base{n:02X}") for n in range(16)}
+    out = tpl.format(**fields)
+    return "themes/herdr/wana.toml", out
+
+
 def render_tmux(s: Scheme) -> tuple[str, str]:
     with open(os.path.join(TPL, "tmux.conf.tmpl")) as f:
         tpl = f.read()
@@ -148,6 +157,7 @@ RENDERERS = [
     render_lazygit,
     render_opencode,
     render_tmux,
+    render_herdr,
 ]
 
 
