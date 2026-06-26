@@ -1,13 +1,40 @@
 # Wana — porting roadmap (palette → apps)
 
-The Wana palette (Light / Dark) currently lives only as web tokens in
-`tokens/base.css`. Goal: **one source-of-truth palette → many app themes**,
-following the base16/base24 (tinted-theming) standard wherever an app supports
-it, hand-written templates where it doesn't.
+The Wana palette (Light / Dark) lives as canonical **base24 schemes** in
+`schemes/wana-{light,dark}.yaml`. Goal: **one source-of-truth palette → many app
+themes**, following the base16/base24 (tinted-theming) standard wherever an app
+supports it, hand-written templates where it doesn't.
 
-Source colors today: `tools/proposals.json` (`D-light` / `D-dark`) and
-`tokens/base.css` — 10 semantic roles. Verify every generated color with
+Generation: `python3 tools/gen.py` renders every committed file under `themes/`
+from `schemes/`; `python3 tools/gen.py --check` (and the `tools/` test suite)
+guards freshness/drift. Add a target by writing `tools/templates/<x>` + a
+`render_<x>()` in `tools/gen.py`. Verify colors with
 `python3 tools/color.py contrast <fg> <bg>`.
+
+---
+
+## Current status & resume point (updated 2026-06-26)
+
+**Shipped — 13 generated targets** in `themes/` (all from `schemes/`, 52 tests green):
+alacritty, bat, btop, fzf, herdr, kitty, lazygit, opencode, pywal, starship,
+tmux, tty, **yazi**.
+
+**Standalone repos** (generated here, published one-way via `tools/publish.sh`
+with `git subtree`; palette stays canonical in `schemes/` → no drift):
+
+- ✅ **wana.yazi** — LIVE at private `atalariq/wana.yazi`. Install:
+  `ya pkg add atalariq/wana.yazi:wana-dark`.
+- ⏸️ **wana.nvim** — plan written & ready, execution paused at Task 1.
+
+**▶️ Resume here (wana.nvim):** execute
+`docs/superpowers/plans/2026-06-26-wana-nvim-colorscheme.md` (subagent-driven).
+Architecture: palette `lua/wana/palette.lua` is GENERATED from `schemes/`
+(`render_nvim_palette`); highlight groups are HAND-AUTHORED in
+`lua/wana/highlights.lua`. Prerequisites: Neovim installed (Task 4 headless load
+gate) + green light to create private `atalariq/wana.nvim`. The publish script
+`tools/publish.sh nvim` already exists. Companion: the shipped yazi plan
+`docs/superpowers/plans/2026-06-26-wana-yazi-flavor.md` is the proven template
+for the subtree/publish flow.
 
 ---
 
@@ -30,43 +57,46 @@ Source colors today: `tools/proposals.json` (`D-light` / `D-dark`) and
 ## Phase 1 — Core targets
 
 - [ ] **wana.nvim** — Neovim colorscheme (Lua), light + dark, treesitter + LSP +
-      common plugins. Author directly or via a base16/base24 nvim builder. Ship as
-      its own repo (`wana.nvim`). Namespace confirmed free.
-- [ ] **kitty** — `wana-dark.conf` / `wana-light.conf`: `foreground`,
-      `background`, `cursor`, `selection_*`, `color0`–`color15`. Generate straight
-      from the base24 ANSI set.
+      common plugins. Ship as its own repo (`wana.nvim`). _Plan written & ready:_
+      `docs/superpowers/plans/2026-06-26-wana-nvim-colorscheme.md` (palette
+      generated, highlights hand-authored). **Paused at Task 1 — resume here.**
+- [x] **kitty** — `wana-dark.conf` / `wana-light.conf`: `foreground`,
+      `background`, `cursor`, `selection_*`, `color0`–`color15`. Generated from
+      the base24 ANSI set. (`themes/kitty/`)
 - [ ] **Noctalia v5** — `~/.config/noctalia/palettes/Wana.json` (JSON). Needs **16
       Material Design 3 roles** (`mPrimary`/`mOnPrimary`, `mSecondary`,
       `mTertiary`, `mError`, `mSurface`, `mSurfaceVariant`, `mOutline`, `mShadow`,
       `mHover`/`mOnHover` …) **+ a `terminal` block** (bg/fg/cursor/selection +
       normal & bright ANSI), `dark` required / `light` optional. Map Wana roles →
       M3 roles. Ref: <https://docs.noctalia.dev/v5/theming/palette/>
-- [ ] **Herdr** — `~/.config/herdr/config.toml`, `[theme.custom]`: `panel_bg`,
-      `accent`, `green`, `blue`, `red`, `yellow` (subset — quick win). Ref:
+- [x] **Herdr** — `[theme.custom]`: `panel_bg`, `accent`, `green`, `blue`, `red`,
+      `yellow`. Generated. (`themes/herdr/wana.toml`) Ref:
       <https://herdr.dev/docs/configuration/#theme>
 
 ## Phase 2 — Dev tools / CLIs I use
 
-- [ ] **Alacritty** — `colors.primary` / `colors.normal` / `colors.bright` TOML;
-      generate from the base24 ANSI set (same data as kitty).
-- [ ] **OpenCode** — custom theme (JSON theme file). Verify the exact schema &
-      path before generating.
+- [x] **Alacritty** — `colors.primary` / `colors.normal` / `colors.bright` TOML;
+      generated from the base24 ANSI set. (`themes/alacritty/`)
+- [x] **OpenCode** — custom JSON theme. Generated. (`themes/opencode/wana.json`)
 - [ ] **Claude Code** — verify theming mechanism (terminal-ANSI driven vs a
       settings theme) before deciding what to ship.
 - [ ] **Codex** — CLI, terminal-color driven; likely covered by the kitty/
       alacritty ANSI palette. Confirm.
 - [ ] **Hermes** — apply Wana to its site/styles (it can `@import` `tokens/
 base.css` or consume the generated CSS).
-- [ ] **Others** (`dsb.`) — bat, delta, fzf, btop, starship, zsh/prompt: mostly
-      free via tinted-theming base16/base24 templates once Phase 0 lands.
+- [x] **Shipped via base24 templates** — bat, fzf, btop, starship, tmux, tty,
+      pywal, lazygit. (`themes/<app>/`)
+- [ ] **Still free / quick wins** — delta, zsh/prompt: add a template +
+      `render_<x>()` when wanted.
 
 ---
 
 ## Notes
 
-- **Leverage:** Phase 0's base24 scheme is the unlock — most Phase 2 apps fall
-  out of `tinty` for near-zero extra effort. Do Phase 0 before hand-rolling
-  anything per-app.
+- **Leverage:** Phase 0's base24 scheme is the unlock — most ANSI-driven apps
+  are near-zero effort: add a `tools/templates/<x>` + `render_<x>()` and they
+  generate from `schemes/`. Reach for hand-authoring only where an app needs
+  opinionated, non-palette-dump design (e.g. the nvim highlight groups).
 - **Distribution:** publish the design system to npm under a scope
   (`@atalariq/wana`) — the bare `wana` package name is taken. Colorscheme repos
   (`wana.nvim`, etc.) and tinted-theming submission are unaffected.
