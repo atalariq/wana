@@ -62,6 +62,15 @@ class TestGen(unittest.TestCase):
         self.assertIn("wana-dark", dark)
         self.assertIn("#", dark)
 
+    def test_yazi_tmtheme_is_valid_xml(self):
+        import xml.etree.ElementTree as ET
+
+        files = gen.build()
+        dark = files["themes/yazi/wana-dark.yazi/tmtheme.xml"]
+        ET.fromstring(dark)  # raises if malformed
+        self.assertIn("wana-dark", dark)
+        self.assertIn("#", dark)
+
     def test_starship_palette_block(self):
         files = gen.build()
         out = files["themes/starship/wana.toml"]
