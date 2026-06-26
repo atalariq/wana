@@ -41,9 +41,7 @@ research/
   accessibility.md         # WCAG guidelines, testing methodology
   typography.md            # Type scale, font pairing, readability
 proposals/
-  proposal-A.md            # Full colorscheme proposal with tokens
-  proposal-B.md
-  proposal-C.md
+  proposal-D.md            # "Forest" — the chosen direction
 tokens/
   base.css                 # The chosen baseline token file
 schemes/
