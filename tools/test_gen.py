@@ -84,6 +84,12 @@ class TestGen(unittest.TestCase):
         # cwd is the dark blue (base0D)
         self.assertEqual(data["mgr"]["cwd"]["fg"].lower(), "#80b7f0")
 
+    def test_yazi_emits_two_flavors(self):
+        files = gen.build()
+        yazi = [k for k in files if k.startswith("themes/yazi/")]
+        # 2 variants x (flavor.toml + tmtheme.xml)
+        self.assertEqual(len(yazi), 4, yazi)
+
     def test_starship_palette_block(self):
         files = gen.build()
         out = files["themes/starship/wana.toml"]
