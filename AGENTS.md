@@ -52,6 +52,9 @@ tools/
   scheme.py                # base24 loader + ANSI-16 mapping
 themes/                    # GENERATED app themes (do not hand-edit)
   kitty/
+  yazi/                    # GENERATED yazi flavors -> atalariq/wana.yazi (private)
+    wana-dark.yazi/
+    wana-light.yazi/
 ```
 
 ## Commit Conventions

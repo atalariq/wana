@@ -139,6 +139,13 @@ Terminal/editor themes are generated from the canonical base24 schemes in
 `schemes/` by `tools/gen.py`, into `themes/` (never hand-edited). Regenerate
 with `python3 tools/gen.py`; freshness is checked with `python3 tools/gen.py --check`.
 
+### Standalone repos
+
+Some targets ship as their own installable repos, generated from `schemes/`
+and published one-way with `tools/publish.sh`:
+
+- `themes/yazi/` → `atalariq/wana.yazi` (install: `ya pkg add atalariq/wana.yazi:wana-dark`)
+
 ---
 
 ## Playground
