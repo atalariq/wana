@@ -103,6 +103,15 @@ def render_yazi_tmtheme(s: Scheme) -> tuple[str, str]:
     return rel, out
 
 
+def render_yazi_flavor(s: Scheme) -> tuple[str, str]:
+    with open(os.path.join(TPL, "yazi.flavor.toml.tmpl")) as f:
+        tpl = f.read()
+    fields = {f"base{n:02X}": s.hex(f"base{n:02X}") for n in range(16)}
+    out = tpl.format(**fields)
+    rel = f"themes/yazi/wana-{s.variant}.yazi/flavor.toml"
+    return rel, out
+
+
 def render_starship(s: Scheme) -> tuple[str, str]:
     d = _scheme("dark")
     with open(os.path.join(TPL, "starship.toml.tmpl")) as f:
@@ -163,6 +172,7 @@ RENDERERS = [
     render_fzf,
     render_bat,
     render_yazi_tmtheme,
+    render_yazi_flavor,
     render_starship,
     render_btop,
     render_lazygit,

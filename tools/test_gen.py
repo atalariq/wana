@@ -71,6 +71,19 @@ class TestGen(unittest.TestCase):
         self.assertIn("wana-dark", dark)
         self.assertIn("#", dark)
 
+    def test_yazi_flavor_is_valid_toml(self):
+        import tomllib
+
+        files = gen.build()
+        raw = files["themes/yazi/wana-dark.yazi/flavor.toml"]
+        data = tomllib.loads(raw)  # raises if malformed
+        for section in ("mgr", "mode", "status", "tabs", "which", "filetype"):
+            self.assertIn(section, data, f"missing [{section}]")
+        # flavor uses its own tmtheme -> must NOT set syntect_theme
+        self.assertNotIn("syntect_theme", data["mgr"])
+        # cwd is the dark blue (base0D)
+        self.assertEqual(data["mgr"]["cwd"]["fg"].lower(), "#80b7f0")
+
     def test_starship_palette_block(self):
         files = gen.build()
         out = files["themes/starship/wana.toml"]
