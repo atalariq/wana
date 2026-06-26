@@ -18,6 +18,7 @@ publish() {
 		return 0
 	}
 	git remote get-url "$name" >/dev/null 2>&1 || git remote add "$name" "$url"
+	git branch -D "$branch" 2>/dev/null || true # drop a leftover from a failed run
 	git subtree split --prefix="$prefix" -b "$branch"
 	if [ "${FORCE:-0}" = "1" ]; then
 		git push --force "$name" "$branch:main"
